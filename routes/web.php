@@ -46,6 +46,17 @@ Route::prefix('admin')->group(function(){
 
     Route::prefix('espaces')->group(function () {
         Route::get('/index', [EspaceController::class, 'index'])->name('espaces.index');
+        Route::get('/edit/{espace}', [EspaceController::class, 'edit'])->name('espaces.edit');
+        Route::get('/show/{espace}', [EspaceController::class, 'show'])->name('espaces.show');
+        Route::get('/addStu/{espace}', [EspaceController::class, 'addStu'])->name('espaces.addStu');
+        Route::delete('/{espace}', [EspaceController::class, 'destroy'])->name('espaces.destroy');
+        Route::put('/{espace}', [EspaceController::class, 'update'])->name('espaces.update');
+        Route::post('espaces/{espace}/inscrire-etudiant', [EspaceController::class, 'inscrireEtudiant'])
+         ->name('espaces.inscrire-etudiant');
+        Route::post('espaces/{espace}/retire-etudiant', [EspaceController::class, 'retireEtudiant'])
+         ->name('espaces.retire-etudiant');
+        
+
     });
 
 
@@ -63,6 +74,7 @@ Route::prefix('admin')->group(function(){
         Route::get('/show', fn() => view('adminLayout.profil.show'))->name('profil.show');
     });
 });
+
 
 
 

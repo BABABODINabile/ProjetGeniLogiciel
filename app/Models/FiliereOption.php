@@ -15,4 +15,6 @@ class FiliereOption extends Model
         return $this->hasMany(Etudiant::class);
     }
 
+    
+
 }

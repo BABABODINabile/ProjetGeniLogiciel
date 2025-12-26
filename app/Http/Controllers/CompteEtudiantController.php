@@ -1,11 +1,17 @@
 <?php
 namespace App\Http\Controllers;
-
+use App\Services\CompteEtudiantService;
 use App\Http\Controllers\Controller;
+use App\Models\Etudiant;
 use Illuminate\Http\Request;
 
 class CompteEtudiantController extends Controller
 {
+
+    public function __construct(
+        protected CompteEtudiantService $compteEtudiantService
+    ) {}
+
     /**
      * Dashboard étudiant
      */
@@ -19,8 +25,7 @@ class CompteEtudiantController extends Controller
      */
     public function profil()
     {
-        //
-        return view('etudiantLayout.profil.show');
+        
     }
 
     /**
@@ -34,10 +39,11 @@ class CompteEtudiantController extends Controller
     /**
      * Liste des espaces pédagogiques
      */
-    public function espaces()
+    public function espaces(Etudiant $etudiant)
     {
-        //
-        return view('etudiantLayout.espaces.index');
+        $espaces = $this->compteEtudiantService->getMySpace($etudiant->id);
+
+        return view('etudiantLayout.espaces.index', compact('espaces'));
     }
 
     /**
