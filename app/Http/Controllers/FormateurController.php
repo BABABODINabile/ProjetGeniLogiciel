@@ -28,19 +28,26 @@ class FormateurController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Show the form for creating a new formateur.
      */
     public function create()
     {
-        //
+        return view('adminLayout.formateurs.create');
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Store a newly created formateur in storage.
      */
     public function store(StoreFormateurRequest $request)
     {
-        //
+        try {
+            $this->formateurService->createFormateur($request->validated());
+            return redirect()->route('formateurs.index')
+                ->with('success', 'Le formateur a été créé avec succès.');
+        } catch (\Exception $e) {
+            return back()->withInput()
+                ->withErrors(['error' => 'Une erreur est survenue lors de la création du formateur.']);
+        }
     }
 
     /**

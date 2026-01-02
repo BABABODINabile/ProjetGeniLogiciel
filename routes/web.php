@@ -31,6 +31,8 @@ Route::prefix('admin')->group(function(){
 
     Route::prefix('formateurs')->group(function () {
         Route::get('/index',[FormateurController::class, 'index'])->name('formateurs.index');
+        Route::get('/create', [FormateurController::class, 'create'])->name('formateurs.create');
+        Route::post('/', [FormateurController::class, 'store'])->name('formateurs.store');
     });
 
 
