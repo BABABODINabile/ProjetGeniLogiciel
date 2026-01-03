@@ -12,8 +12,7 @@ use Exception;
 
 class FormateursService
 {
-
-     /**
+    /**
      * Récupérer tous les formateurs avec leurs relations
      */
     public function getAllFormateurs()

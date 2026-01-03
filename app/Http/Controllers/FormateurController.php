@@ -36,7 +36,7 @@ class FormateurController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Show the form for creating a new formateur.
      */
     public function create()
     {
@@ -44,7 +44,7 @@ class FormateurController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Store a newly created formateur in storage.
      */
     public function store(StoreFormateurRequest $request)
     {
