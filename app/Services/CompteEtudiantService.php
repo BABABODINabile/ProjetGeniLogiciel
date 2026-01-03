@@ -14,9 +14,8 @@ class CompteEtudiantService
      * Mes espaces en tant qu'étudiant
      */
 
-    public function getMySpace($etudiantId)
+    public function getMySpace()
     {
-        $etudiant=Etudiant::with(['promotion'])->findOrFail($etudiantId);
-        return $etudiant->espaces;
+        
     }
 }

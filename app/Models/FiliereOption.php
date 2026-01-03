@@ -14,7 +14,10 @@ class FiliereOption extends Model
     {
         return $this->hasMany(Etudiant::class);
     }
-
+    public function promotions(): HasMany
+    {
+        return $this->hasMany(Promotion::class);
+    }
     
 
 }
