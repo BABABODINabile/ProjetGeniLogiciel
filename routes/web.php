@@ -33,9 +33,6 @@ Route::prefix('admin')->group(function(){
         Route::get('/index',[FormateurController::class, 'index'])->name('formateurs.index');
         Route::get('/create', [FormateurController::class, 'create'])->name('formateurs.create');
         Route::post('/', [FormateurController::class, 'store'])->name('formateurs.store');
-        Route::get('/{formateur}/edit', [FormateurController::class, 'edit'])->name('formateurs.edit');
-        Route::put('/{formateur}', [FormateurController::class, 'update'])->name('formateurs.update');
-        Route::delete('/{formateur}', [FormateurController::class, 'destroy'])->name('formateurs.destroy');
     });
 
 
