@@ -13,7 +13,7 @@ class FormateurPolicy
      */
     public function viewAny(User $user): bool
     {
-        return true; // Tous les utilisateurs authentifiés peuvent voir la liste
+        //
     }
 
     /**
@@ -21,7 +21,7 @@ class FormateurPolicy
      */
     public function view(User $user, Formateur $formateur): bool
     {
-        return true; // Tous les utilisateurs authentifiés peuvent voir un formateur
+        //
     }
 
     /**
@@ -29,7 +29,7 @@ class FormateurPolicy
      */
     public function create(User $user): bool
     {
-        return true; // Tous les utilisateurs authentifiés peuvent créer un formateur
+        //
     }
 
     /**
@@ -37,7 +37,7 @@ class FormateurPolicy
      */
     public function update(User $user, Formateur $formateur): bool
     {
-        return true; // Tous les utilisateurs authentifiés peuvent mettre à jour un formateur
+        //
     }
 
     /**
@@ -45,7 +45,7 @@ class FormateurPolicy
      */
     public function delete(User $user, Formateur $formateur): bool
     {
-        return true; // Tous les utilisateurs authentifiés peuvent supprimer un formateur
+        //
     }
 
     /**
@@ -53,7 +53,7 @@ class FormateurPolicy
      */
     public function restore(User $user, Formateur $formateur): bool
     {
-        return false; // Désactivé pour l'instant
+        //
     }
 
     /**
@@ -61,6 +61,6 @@ class FormateurPolicy
      */
     public function forceDelete(User $user, Formateur $formateur): bool
     {
-        return false; // Désactivé pour l'instant
+        //
     }
 }

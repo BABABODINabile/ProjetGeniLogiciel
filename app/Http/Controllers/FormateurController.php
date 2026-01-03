@@ -63,7 +63,7 @@ class FormateurController extends Controller
      */
     public function edit(Formateur $formateur)
     {
-        return view('adminLayout.formateurs.edit', compact('formateur'));
+        //
     }
 
     /**
@@ -71,14 +71,7 @@ class FormateurController extends Controller
      */
     public function update(UpdateFormateurRequest $request, Formateur $formateur)
     {
-        try {
-            $this->formateurService->updateFormateur($formateur, $request->validated());
-            return redirect()->route('formateurs.index')
-                ->with('success', 'Le formateur a été mis à jour avec succès.');
-        } catch (\Exception $e) {
-            return back()->withInput()
-                ->withErrors(['error' => 'Une erreur est survenue lors de la mise à jour du formateur.']);
-        }
+        //
     }
 
     /**
@@ -86,12 +79,6 @@ class FormateurController extends Controller
      */
     public function destroy(Formateur $formateur)
     {
-        try {
-            $this->formateurService->deleteFormateur($formateur);
-            return redirect()->route('formateurs.index')
-                ->with('success', 'Le formateur a été supprimé avec succès.');
-        } catch (\Exception $e) {
-            return back()->withErrors(['error' => 'Une erreur est survenue lors de la suppression du formateur.']);
-        }
+        //
     }
 }
