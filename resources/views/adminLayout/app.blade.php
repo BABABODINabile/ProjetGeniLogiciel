@@ -85,12 +85,46 @@
             background-color: #cbd5e1;
             border-radius: 10px;
         }
+        .hidden {
+            display: none;
+        }
+
     </style>
 </head>
 
 <body class="h-full bg-slate-200 text-slate-700 overflow-hidden">
+<!-- Notification de connection -->
 
+
+
+<!-- modal de confirmation de déconnexion-->
+    <x-bladewind::modal
+        name="logout"
+        type="warning"
+        title="Déconnexion"
+        ok_button_action="logout()"
+        ok_button_label="Se déconnecter"
+        cancel_button_label="Annuler"
+        align_buttons="center"
+        >
+        Voulez-vous vraiment vous déconnecter ?
+        <br>
+        Cette action est <b class="text-red-600">irréversible</b>.
+
+    </x-bladewind::modal>
 <div class="flex h-screen">
+
+<script>
+    function confirmLogout() {
+        // Affiche ton modal de confirmation
+        showModal('logout');
+    }
+    function logout() {
+        const form = document.getElementById('logout-form');
+        // On place l'ID de l'étudiant dans le champ caché
+        form.submit();
+    }
+</script>
 
     <!-- ================= SIDEBAR ================= -->
     <aside id="sidebar"
@@ -180,29 +214,84 @@
     <div class="flex-1 flex flex-col min-w-0">
 
         <!-- Header -->
-        <header class="h-16 bg-white border-b border-slate-200 flex items-center justify-between px-6 shadow-sm rounded-b-xl hover:shadow-md transition">
+            <header class="h-20 bg-white/80 backdrop-blur-md border-b border-slate-200 flex items-center justify-between px-8 sticky top-0 z-30">
             <div>
-                <h1 class="text-lg font-bold text-slate-800">
+                <h1 class="text-xl font-black text-slate-800 tracking-tight">
                     @yield('page_title', 'Dashboard')
                 </h1>
-                <p class="text-[11px] text-slate-600 uppercase tracking-widest">
-                    Système académique
-                </p>
+                <div class="flex items-center gap-2">
+                    <span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
+                    <p class="text-[10px] text-slate-500 font-bold uppercase tracking-widest">
+                        Système opérationnel
+                    </p>
+                </div>
+            </div>
+            @if (session('success-login'))
+            <div id="alertConnect" class="transition-opacity duration-300 opacity-100">
+                <x-bladewind::alert
+                    type="success"
+                    shade="dark">
+                    {{ session('success-login') }}
+                </x-bladewind::alert>
             </div>
 
-            <div class="flex items-center gap-4">
-                <div class="hidden sm:flex items-center gap-2 bg-gray-700 px-3 py-1.5 rounded-xl">
-                    <i class="fas fa-user-circle text-blue-500"></i>
-                    <div>
-                        <p class="text-xs font-bold text-white uppercase">Admin</p>
-                        <p class="text-[10px] text-slate-300 uppercase">Directeur</p>
+                <script>
+                    document.addEventListener('DOMContentLoaded', () => {
+                        const alertBox = document.getElementById('alertConnect');
+                        if (!alertBox) return;
+
+                        setTimeout(() => {
+                            alertBox.classList.add('opacity-0');
+
+                            setTimeout(() => {
+                                alertBox.classList.add('hidden');
+                            }, 300);
+                        }, 2000);
+                    });
+                </script>
+            @endif
+
+            <div class="flex items-center gap-6">
+                <div class="flex items-center gap-3 bg-slate-50 border border-slate-100 p-1.5 pr-4 rounded-2xl hover:bg-white hover:shadow-sm transition cursor-pointer">
+                    <div class="w-10 h-10 rounded-xl bg-gray-900 flex items-center justify-center text-white shadow-indigo-100 shadow-lg">
+                        <i class="fas fa-user-shield text-sm"></i>
+                    </div>
+                    <div class="hidden md:block">
+                        <p class="text-xs font-black text-slate-800 leading-none mb-1">{{ Auth::user()->email ?? 'Administrateur' }}</p>
+                        <span class="inline-flex items-center px-2 py-0.5 rounded-md text-[9px] font-bold bg-blue-100 text-blue-600 uppercase tracking-tighter">
+                            {{ Auth::user()->administration->fonction}}
+                        </span>
                     </div>
                 </div>
 
-                <button class="w-10 h-10 rounded-xl bg-white border border-red-100 text-red-500
-                               hover:bg-red-500 hover:text-white transition">
-                    <i class="fas fa-power-off"></i>
+                <form id="logout-form" action="{{ route('logout') }}" method="POST" class="hidden">
+                    @csrf
+                </form>
+
+                <button
+                    onclick="confirmLogout()"
+                    class="group relative w-11 h-11 rounded-xl
+                        bg-white border border-slate-200
+                        text-slate-500
+                        hover:bg-red-0 hover:text-red-500 hover:border-red-500
+                        transition-all duration-200 ease-out
+                        shadow-sm hover:shadow
+                        flex items-center justify-center">
+
+                    <!-- Icône -->
+                    <i class="fas fa-power-off text-sm transition-transform duration-200 group-hover:scale-110"></i>
+
+                    <!-- Tooltip -->
+                    <span class="absolute bottom-full mb-2 px-3 py-1
+                                text-[11px] font-semibold uppercase tracking-wide
+                                text-white bg-gray-900 rounded-md
+                                opacity-0 translate-y-1
+                                group-hover:opacity-100 group-hover:translate-y-20
+                                transition-all duration-200 pointer-events-none">
+                        Déconnexion
+                    </span>
                 </button>
+
             </div>
         </header>
 

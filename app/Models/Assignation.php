@@ -17,8 +17,13 @@ class Assignation extends Model
         return $this->belongsTo(Travail::class);
     }
 
-    public function livraisons(): HasMany
+    public function livraison(): BelongsTo
     {
-        return $this->hasMany(Livraison::class);
+        return $this->belongsTo(Livraison::class);
+    }
+
+    public function etudiant(): BelongsTo
+    {
+        return $this->belongsTo(Etudiant::class);
     }
 }

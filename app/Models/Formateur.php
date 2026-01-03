@@ -29,4 +29,9 @@ class Formateur extends Model
     {
         return $this->hasMany(Espace::class);
     }
+
+    public function travails(): HasMany
+    {
+        return $this->hasMany(Travail::class);
+    }
 }

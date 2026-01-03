@@ -11,7 +11,7 @@ class UpdateFormateurRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +22,11 @@ class UpdateFormateurRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'email' => 'nullable|email',
+            'nom' => 'required|string|max:255',
+            'prenom' => 'required|string|max:255',
+            'specialite' => 'nullable|string|max:255',
+            'is_active' => 'nullable|boolean',
         ];
     }
 }

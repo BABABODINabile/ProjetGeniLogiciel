@@ -21,10 +21,18 @@ class FormateurController extends Controller
      */
     public function index()
     {
-        //
-        $formateurs=$this->formateurService->getAllFormateurs();
-        return view('adminLayout.formateurs.index',compact('formateurs'));
+        $formateurs = $this->formateurService->getAllFormateurs();
+        $data = $formateurs->map(function($f) {
+            return [
+                'id' => $f->id,
+                'nom' => $f->nom,
+                'prenom' => $f->prenom,
+                'email' => $f->user->email ?? '',
+                'specialite' => $f->specialite ?? '',
+            ];
+        })->toArray();
 
+        return view('adminLayout.formateurs.index', compact('data'));
     }
 
     /**
@@ -41,12 +49,13 @@ class FormateurController extends Controller
     public function store(StoreFormateurRequest $request)
     {
         try {
-            $this->formateurService->createFormateur($request->validated());
+            $formateur = $this->formateurService->createFormateur($request->validated());
+
             return redirect()->route('formateurs.index')
-                ->with('success', 'Le formateur a été créé avec succès.');
+                ->with('success-form-store', "Le formateur {$formateur->prenom} a été créé et ses accès envoyés.");
+
         } catch (\Exception $e) {
-            return back()->withInput()
-                ->withErrors(['error' => 'Une erreur est survenue lors de la création du formateur.']);
+            return back()->withInput()->with('error-form-store', 'Une erreur est survenue : ' . $e->getMessage());
         }
     }
 

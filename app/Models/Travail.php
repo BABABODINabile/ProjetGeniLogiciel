@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\Model;
 class Travail extends Model
 {
     use HasFactory;
-    protected $fillable = ['titre', 'consigne', 'type', 'espace_id'];
+    protected $fillable = ['titre', 'consigne', 'type', 'espace_id','formateur_id','statut'];
 
     // Travail appartient à un Espace
     public function espace(): BelongsTo
@@ -22,5 +22,10 @@ class Travail extends Model
     public function assignations(): HasOne
     {
         return $this->hasOne(Assignation::class);
+    }
+
+     public function formateur(): BelongsTo
+    {
+        return $this->belongsTo(Formateur::class);
     }
 }

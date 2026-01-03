@@ -44,7 +44,25 @@
 
 
 @endphp
+<x-bladewind::notification />
 
+@if (session('success-etu-store'))
+    <script>
+        showNotification(
+            'Création réussie',
+            "{{ session('success-etu-store') }}"
+        );
+    </script>
+@endif
+@if (session('error-etu-store'))
+    <script>
+        showNotification(
+            'Création échouée',
+            "{{ session('error-etu-store') }}",
+            'error'
+        );
+    </script>
+@endif
 <div class="space-y-8">
 
     {{-- ================= HEADER ================= --}}
@@ -59,7 +77,7 @@
                 <i class="fas fa-file-export mr-1"></i> Exporter
             </x-bladewind::button>
 
-            <x-bladewind::button size="small" @class(['p-4', 'font-bold' => true,])>
+            <x-bladewind::button size="small" @class(['p-4', 'font-bold' => true,]) onclick="goToStoreStu()">
                 <i class="fas fa-plus mr-1"></i> Ajouter un étudiant
             </x-bladewind::button>
         </div>
@@ -81,5 +99,10 @@
 
 </div>
 
-
+<script>
+    function goToStoreStu() {
+    // On passe l'ID directement via Blade
+    window.location.href = "{{ route('etudiant.create')}}";
+    }
+</script>
 @endsection

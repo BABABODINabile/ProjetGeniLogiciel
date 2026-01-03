@@ -132,7 +132,7 @@ class BladewindNotification {
                             dismiss_in=15,
                             size='regular',
                             name=null}) => {*/
-var showNotification = (title, message, type = 'success', dismiss_in = 15, size = 'regular', name = null) => {
+var showNotification = (title, message, type = 'success', dismiss_in = 5, size = 'regular', name = null) => {
     new BladewindNotification({
         title: title,
         message: message,

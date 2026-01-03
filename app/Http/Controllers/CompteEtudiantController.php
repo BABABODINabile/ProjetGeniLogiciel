@@ -1,11 +1,20 @@
 <?php
 namespace App\Http\Controllers;
-
+use App\Services\CompteEtudiantService;
 use App\Http\Controllers\Controller;
+use App\Models\Etudiant;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
+use App\Models\Espace;
+use App\Models\Travail;
 
 class CompteEtudiantController extends Controller
 {
+
+    public function __construct(
+        protected CompteEtudiantService $compteEtudiantService
+    ) {}
+
     /**
      * Dashboard étudiant
      */
@@ -19,8 +28,12 @@ class CompteEtudiantController extends Controller
      */
     public function profil()
     {
-        //
-        return view('etudiantLayout.profil.show');
+
+        $user = Auth::user()->load('etudiant.promotion', 'etudiant.filiere_option');
+        return view('etudiantLayout.espaces.profil', [
+            'user' => $user,
+            'page_title' => 'Mon Profil'
+        ]);
     }
 
     /**
@@ -36,18 +49,43 @@ class CompteEtudiantController extends Controller
      */
     public function espaces()
     {
-        //
-        return view('etudiantLayout.espaces.index');
+            // On récupère l'étudiant connecté avec ses espaces, les matières et les formateurs liés
+            $etudiant = Auth::user()->etudiant;
+            $espaces = $etudiant->espaces()->with(['matiere', 'formateur'])->get();
+        return view('etudiantLayout.espaces.index',[
+                'espaces' => $espaces,
+                'page_title' => 'Mes Espaces de Cours'
+            ]);
     }
+
+
 
     /**
      * Détails d’un espace pédagogique
      */
-    public function showEspace($espaceId)
+    public function showEspace($id)
     {
-        //
-        
+        $etudiant = Auth::user()->etudiant;
+        $espace = Espace::with(['matiere', 'formateur'])->findOrFail($id);
 
+        // On récupère les travaux de cet espace QUI sont assignés à cet étudiant
+        $travaux = Travail::where('espace_id', $id)
+            ->where('statut', 'en_cours')
+            ->whereHas('assignations', function($query) use ($etudiant) {
+                $query->where(function($q) use ($etudiant) {
+                    $q->where('etudiant_id', $etudiant->id)
+                    ->orWhere('promotion_id', $etudiant->promotion_id);
+                    // Ajoute orWhere('groupe_id', ...) si tu gères les groupes
+                });
+            })
+            ->with(['assignations' => function($q) use ($etudiant) {
+                // On récupère l'assignation spécifique pour avoir la date_fin
+                $q->where('etudiant_id', $etudiant->id)
+                ->orWhere('promotion_id', $etudiant->promotion_id);
+            }])
+            ->get();
+
+        return view('etudiantLayout.espaces.show', compact('espace', 'travaux'));
     }
 
     /**
