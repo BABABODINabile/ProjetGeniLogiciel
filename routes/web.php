@@ -5,6 +5,7 @@ use App\Http\Controllers\CompteEtudiantController;
 use App\Http\Controllers\EtudiantController;
 use App\Http\Controllers\FormateurController;
 use App\Http\Controllers\EspaceController;
+use App\Http\Controllers\PromotionController;
 use App\Models\Espace;
 
 /*
@@ -39,9 +40,20 @@ Route::prefix('admin')->group(function(){
     });
 
 
-    Route::prefix('promotions')->group(function () {
-        Route::get('/index', fn() => view('adminLayout.promotions.index'))->name('promotions.index');
+
+
+
+    Route::prefix('promotions')->name('promotions.')->group(function () {
+        Route::get('/index', [PromotionController::class, 'index'])->name('index');
+        Route::get('/create', [PromotionController::class, 'create'])->name('create');
+        Route::post('/store', [PromotionController::class, 'store'])->name('store');  // Ajout POST
+        Route::get('/show/{promotion}', [PromotionController::class, 'show'])->name('show');
+        Route::get('/edit/{promotion}', [PromotionController::class, 'edit'])->name('edit');
+        Route::put('/update/{promotion}', [PromotionController::class, 'update'])->name('update');  // Ajout PUT
+        Route::delete('/destroy/{promotion}', [PromotionController::class, 'destroy'])->name('destroy');  // Ajout DELETE
     });
+
+
 
 
     Route::prefix('espaces')->group(function () {
