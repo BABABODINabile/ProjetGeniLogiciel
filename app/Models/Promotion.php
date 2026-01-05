@@ -11,11 +11,8 @@ class Promotion extends Model
 {
     use HasFactory;
 
+    protected $fillable = ['libelle', 'filiere_option_id', 'year'];  // Utilisez les vrais champs
 
-    public function etudiants() : HasMany
-    {
-        return $this->hasMany(Etudiant::class);
-    }
 
     public function filiere_option(): BelongsTo
     {
