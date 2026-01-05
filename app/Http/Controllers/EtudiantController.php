@@ -6,6 +6,8 @@ use App\Services\EtudiantService;
 use App\Http\Requests\StoreEtudiantRequest;
 use App\Http\Requests\UpdateEtudiantRequest;
 use App\Models\Etudiant;
+use App\Models\Promotion;
+use App\Models\FiliereOption;
 
 class EtudiantController extends Controller
 {
@@ -48,6 +50,9 @@ class EtudiantController extends Controller
     public function create()
     {
         //
+        $promotions = Promotion::all();
+        $filieres = FiliereOption::all();
+        return view('adminLayout.etudiants.create', compact('promotions', 'filieres'));
     }
 
     /**
@@ -55,7 +60,21 @@ class EtudiantController extends Controller
      */
     public function store(StoreEtudiantRequest $request)
     {
-        //
+        try {
+            // 1. Appel du service avec les données validées
+            // On récupère toutes les données du formulaire
+            $etudiant = $this->etudiantService->createStudent($request->validated());
+
+            // 2. Retour avec succès si tout s'est bien passé
+            return redirect()->route('etudiants.index')
+                ->with('success-etu-store', "L'étudiant {$etudiant->prenom} a été créé avec succès et ses accès ont été envoyés par mail.");
+
+        } catch (\Exception $e) {
+            // En cas d'erreur (ex: problème d'envoi de mail ou base de données)
+            return back()
+                ->withInput()
+                ->with('error-etu-store', "Une erreur est survenue lors de la création : " . $e->getMessage());
+        }
     }
 
     /**

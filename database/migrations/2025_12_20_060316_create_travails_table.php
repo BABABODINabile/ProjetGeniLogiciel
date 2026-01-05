@@ -21,6 +21,7 @@ return new class extends Migration
         
         // Relation avec l'espace pédagogique
         $table->foreignId('espace_id')->constrained('espaces')->onDelete('cascade');
+        $table->foreignId('formateur_id')->constrained('formateurs')->onDelete('cascade');
         $table->enum('statut', ['en_attente', 'en_cours', 'termine'])->default('en_attente');
         $table->timestamps();
         });

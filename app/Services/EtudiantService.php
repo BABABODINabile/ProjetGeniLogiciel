@@ -4,6 +4,8 @@ namespace App\Services;
 
 use App\Models\User;
 use App\Models\Etudiant;
+use Illuminate\Support\Str;
+use App\Notifications\WelcomeUserNotification;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Exception;
@@ -29,19 +31,23 @@ class EtudiantService
     /**
      * Créer un étudiant et son compte utilisateur (Transactionnel)
      */
-    public function createStudent(array $data)
+   public function createStudent(array $data)
     {
         return DB::transaction(function () use ($data) {
-            // 1. Création de l'utilisateur
+            // 1. Générer un mot de passe provisoire aléatoire et sécurisé
+            $temporaryPassword = Str::random(10);
+
+            // 2. Création de l'utilisateur
             $user = User::create([
                 'email' => $data['email'],
-                'password' => Hash::make($data['password'] ?? 'password123'),
+                // On utilise le mot de passe généré
+                'password' => Hash::make($temporaryPassword),
                 'role' => 'etudiant',
                 'is_active' => $data['is_active'] ?? true,
             ]);
 
-            // 2. Création du profil étudiant
-            return $user->etudiant()->create([
+            // 3. Création du profil étudiant
+            $etudiant = $user->etudiant()->create([
                 'promotion_id'      => $data['promotion_id'],
                 'filiere_option_id' => $data['filiere_option_id'],
                 'matricule'         => $data['matricule'],
@@ -50,6 +56,11 @@ class EtudiantService
                 'date_naissance'    => $data['date_naissance'],
                 'sexe'              => $data['sexe'],
             ]);
+
+            // 4. ENVOI DU MAIL : On envoie le mot de passe EN CLAIR à l'étudiant
+            $user->notify(new WelcomeUserNotification($temporaryPassword));
+
+            return $etudiant;
         });
     }
 

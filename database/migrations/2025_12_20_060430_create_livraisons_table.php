@@ -13,11 +13,14 @@ return new class extends Migration
     {
         Schema::create('livraisons', function (Blueprint $table) {
             $table->id();
-            
-            // Relation avec l'assignation (qui a rendu quoi ?)
             $table->foreignId('assignation_id')->constrained('assignations')->onDelete('cascade');
-            // Le contenu rendu : peut être un texte long, un lien URL, ou un chemin de fichier
-            $table->text('contenu');
+            
+            // Le chemin du fichier (optionnel si l'étudiant n'envoie que du texte)
+            $table->string('fichier_path')->nullable();
+            
+            // Le message ou texte saisi par l'étudiant (optionnel)
+            $table->text('message')->nullable();
+            
             $table->timestamps();
         });
     }

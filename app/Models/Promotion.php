@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Promotion extends Model
 {
@@ -12,8 +13,10 @@ class Promotion extends Model
 
     protected $fillable = ['libelle', 'filiere_option_id', 'year'];  // Utilisez les vrais champs
 
-    public function filiereOption(): BelongsTo
+
+    public function filiere_option(): BelongsTo
     {
-        return $this->belongsTo(FiliereOption::class, 'filiere_option_id');  // Relation avec FiliereOption (ajustez le modèle si nécessaire)
+        return $this->belongsTo(FiliereOption::class);
     }
+    
 }

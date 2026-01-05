@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\Travail;
 use App\Models\Espace;
+use App\Models\Formateur;
 use Illuminate\Database\Seeder;
 
 class TravailSeeder extends Seeder
@@ -18,6 +19,7 @@ class TravailSeeder extends Seeder
                 'consigne' => "Veuillez réaliser le travail pratique concernant le chapitre " . ($index + 1),
                 'type' => $index % 2 == 0 ? 'individuel' : 'collectif',
                 'espace_id' => $espace->id,
+                'formateur_id' => $espace->formateur->id,
                 'statut' => 'en_cours',
             ]);
         }
