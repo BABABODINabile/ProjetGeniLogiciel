@@ -99,4 +99,23 @@ class FormateursService
         });
     }
 
+    /**
+     * Envoyer manuellement les accès (mot de passe temporaire) au formateur
+     */
+    public function sendCredentials($id)
+    {
+        return DB::transaction(function () use ($id) {
+            $formateur = Formateur::findOrFail($id);
+            $user = $formateur->user;
+
+            $temporaryPassword = Str::random(10);
+            $user->update(['password' => Hash::make($temporaryPassword)]);
+
+            // Envoi de la notification
+            $user->notify(new WelcomeFormateurNotification($temporaryPassword));
+
+            return true;
+        });
+    }
+
 }

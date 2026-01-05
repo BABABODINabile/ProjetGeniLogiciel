@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class UpdateEtudiantRequest extends FormRequest
 {
@@ -11,7 +12,8 @@ class UpdateEtudiantRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        // Autorisation gérée par middleware/policy ailleurs ; autoriser ici pour permettre la validation
+        return true;
     }
 
     /**
@@ -21,8 +23,29 @@ class UpdateEtudiantRequest extends FormRequest
      */
     public function rules(): array
     {
+        $etudiant = $this->route('etudiant');
+        $etudiantId = $etudiant->id ?? null;
+        $userId = $etudiant->user->id ?? null;
+
         return [
-            //
+            'email'             => [
+                'required',
+                'email',
+                Rule::unique('users', 'email')->ignore($userId),
+            ],
+            'nom'               => 'required|string|max:255',
+            'prenom'            => 'required|string|max:255',
+            'matricule'         => [
+                'required',
+                'string',
+                Rule::unique('etudiants', 'matricule')->ignore($etudiantId),
+            ],
+            'promotion_id'      => 'required|exists:promotions,id',
+            'filiere_option_id' => 'required|exists:filiere_options,id',
+            'date_naissance'    => 'required|date',
+            'sexe'              => 'required|in:M,F',
+            // Mot de passe optionnel lors de la mise à jour
+            'password'          => 'nullable|string|min:8',
         ];
     }
 }

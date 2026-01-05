@@ -5,7 +5,10 @@
 
 @section('content')
 <div class="max-w-4xl mx-auto">
-    <form action="{{ route('formateur.store') }}" method="POST" class="space-y-6">
+    <x-bladewind::button size="small" color="yellow" @class(['p-4', 'font-bold' => true,])  onclick="retour()">
+                <i class="fa-solid fa-arrow-left"></i>
+            </x-bladewind::button>
+    <form action="{{ route('formateurs.store') }}" method="POST" class="space-y-6">
         @csrf
 
         <div class="bg-white rounded-3xl shadow-sm border border-slate-200 overflow-hidden">
@@ -62,5 +65,10 @@
         </div>
     </form>
 </div>
-
+ <script>
+    function retour() {
+       //retour
+        window.location.href = "{{ route('formateurs.index') }}";
+    }
+ </script>
 @endsection

@@ -22,6 +22,8 @@
                 'icon'  => 'pencil-square',
                 'color'=>'gray',
                 'button_outline' => false,
+                'color'=>'gray',
+                'icon_type' => 'solid',
                 'click' => "goToEdit('{id}')",
             ],
             [
@@ -29,6 +31,7 @@
                 'icon'  => 'trash',
                 'color' => 'red',
                 'button_outline'=>false,
+                'icon_type' => 'solid',
                 'click' => "confirmDelete('{id}')",
             ],
         ];
@@ -95,26 +98,26 @@
                 <i class="fas fa-file-export mr-1"></i> Exporter
             </x-bladewind::button>
 
-            <x-bladewind::button size="small" @class(['p-4', 'font-bold' => true,])>
+            <x-bladewind::button size="small" @class(['p-4', 'font-bold' => true,]) onclick="goToCreateForm()">
                 <i class="fas fa-plus mr-1"></i> Créer un espace
             </x-bladewind::button>
         </div>
     </div>
 
     {{-- ================= TABLE ================= --}}
-    <x-bladewind::card class="!p-0">
-        <x-bladewind::table 
-            striped="true" 
-            hoverable="true" 
-            searchable="true" 
-            sortable="true"
-            search_placeholder="Rechercher par nom..." 
-            :column_aliases="$column_aliases"  
-            :action_icons="$action_icons" 
-            :data="$data" 
-            has_shadow="true">
-        </x-bladewind::table>
-    </x-bladewind::card>
+            <x-bladewind::card class="!p-0">
+                    <x-bladewind::table 
+                        striped="true" 
+                        hoverable="true" 
+                        searchable="true" 
+                        sortable="true"
+                        search_placeholder="Rechercher par nom..." 
+                        :column_aliases="$column_aliases"  
+                        :action_icons="$action_icons" 
+                        :data="$data" 
+                        has_shadow="true">
+                    </x-bladewind::table>
+                </x-bladewind::card>
 
 </div>
 {{-- ================= Form de suppression ================= --}}
@@ -162,6 +165,10 @@
         const form = document.getElementById('delete-form');
         form.action = deleteRoute.replace(':id', deleteId);
         form.submit();
+    }
+
+    function goToCreateForm() {
+        window.location.href = "{{ route('espaces.create') }}";
     }
 </script>
 

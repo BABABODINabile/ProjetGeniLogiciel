@@ -69,7 +69,7 @@ class EspaceController extends Controller
         $promotions = Promotion::all();
         $formateurs = Formateur::all();
 
-        //return view('adminLayout.espaces.create', compact('matieres', 'promotions', 'formateurs'));
+        return view('adminLayout.espaces.create', compact('matieres', 'promotions', 'formateurs'));
     }
     //Ajout ou enrregistrement de l'espace
     public function store(StoreEspaceRequest $request)
@@ -98,8 +98,8 @@ class EspaceController extends Controller
             return [
                 'id'         => $etudiant->id,
                 'matricule'  => $etudiant->matricule,
-                'nom' => $etudiant->prenom,
-                'prenom'  => $etudiant->nom,
+                'nom' => $etudiant->nom,
+                'prenom'  => $etudiant->prenom,
                 'sexe'=>$etudiant->sexe,
                 'email'=>$etudiant->user->email,
                 'promotion'=>$etudiant->promotion->libelle,

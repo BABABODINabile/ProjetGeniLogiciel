@@ -11,6 +11,8 @@ class Promotion extends Model
 {
     use HasFactory;
 
+    protected $fillable = ['libelle', 'filiere_option_id', 'year'];
+
 
     public function etudiants() : HasMany
     {

@@ -90,7 +90,9 @@ class EtudiantController extends Controller
      */
     public function edit(Etudiant $etudiant)
     {
-        //
+        $promotions = Promotion::all();
+        $filieres = FiliereOption::all();
+        return view('adminLayout.etudiants.edit', compact('etudiant', 'promotions', 'filieres'));
     }
 
     /**
@@ -98,7 +100,13 @@ class EtudiantController extends Controller
      */
     public function update(UpdateEtudiantRequest $request, Etudiant $etudiant)
     {
-        //
+        try {
+            $updated = $this->etudiantService->updateStudent($etudiant->id, $request->validated());
+            return redirect()->route('etudiants.index')
+                ->with('success-etu-store', "L'étudiant {$updated->prenom} a été mis à jour avec succès.");
+        } catch (\Exception $e) {
+            return back()->withInput()->with('error-etu-store', 'Erreur lors de la mise à jour : ' . $e->getMessage());
+        }
     }
 
     /**
@@ -106,6 +114,24 @@ class EtudiantController extends Controller
      */
     public function destroy(Etudiant $etudiant)
     {
-        //
+        try {
+            $this->etudiantService->deleteStudent($etudiant->id);
+            return redirect()->route('etudiants.index')->with('success-etu-store', "L'étudiant {$etudiant->prenom} a été supprimé.");
+        } catch (\Exception $e) {
+            return back()->with('error-etu-store', 'Erreur lors de la suppression : ' . $e->getMessage());
+        }
+    }
+
+    /**
+     * Envoi manuel des accès (mot de passe temporaire) à un étudiant
+     */
+    public function sendCredentials(Etudiant $etudiant)
+    {
+        try {
+            $this->etudiantService->sendCredentials($etudiant->id);
+            return redirect()->route('etudiants.index')->with('success-etu-store', "Les accès ont été envoyés à {$etudiant->prenom}.");
+        } catch (\Exception $e) {
+            return back()->with('error-etu-store', 'Erreur lors de l\'envoi des accès : ' . $e->getMessage());
+        }
     }
 }

@@ -97,10 +97,11 @@ class TravailController extends Controller
      */
     public function show($id)
     {
-        // On charge le travail avec les assignations et leurs livraisons respectives
+        // On descend dans les relations : Assignation -> Etudiant & Assignation -> Livraison -> Evaluation
         $travail = Travail::with([
             'espace', 
-            'assignations', 
+            'assignations.etudiant', 
+            'assignations.livraison.evaluation' 
         ])->findOrFail($id);
 
         return view('formateurLayout.travaux.show', compact('travail'));

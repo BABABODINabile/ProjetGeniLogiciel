@@ -529,8 +529,7 @@ sup {
 table {
     border-collapse: collapse;
     border-color: inherit;
-    text-indent: 0
-    
+    text-indent: 0;
 }
 
 button,
@@ -1597,11 +1596,11 @@ fieldset[disabled] .bw-select:is(.dark *) {
     border-color: transparent;
     border-left-width: 2px;
     border-right-width: 2px;
-    color: rgba(71, 85, 105, .8);
+    color: rgba(0, 0, 0, 0.8);
     font-size: .875rem;
     line-height: 1.5rem;
     padding: 1rem .75rem;
-    vertical-align: top
+    vertical-align: top;
 }
 
 .bw-table tr>td:is(.dark *) {
@@ -1657,13 +1656,14 @@ fieldset[disabled] .bw-select:is(.dark *) {
     background-color: rgb(255 255 255/var(--tw-bg-opacity, 1));
     border-top-color: rgba(229, 231, 235, .3);
     border-top-width: 1px;
-    color: rgba(0, 0, 0, .8);
+    color: rgba(0, 0, 0, 0.8);
     font-size: .75rem;
     font-weight: 600;
     letter-spacing: .1em;
     line-height: 1rem;
     padding: 1rem .75rem;
-    text-align: left
+    text-align: left;
+    white-space: nowrap;
 }
 
 .bw-table thead>tr>th:is(.dark *) {

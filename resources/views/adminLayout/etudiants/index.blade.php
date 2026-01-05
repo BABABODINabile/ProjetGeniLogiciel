@@ -15,21 +15,23 @@
                 'color' => 'green',
                 'icon_type' => 'solid', // default is outline
                 'button_outline' => false,
-                'click' => "sendMessage('{first_name}')",
+                'click' => "sendMessage('{id}')",
             ],
             [
                 'tip'   => 'Editer',
                 'icon'  => 'pencil-square',
                 'color'=>'gray',
                 'button_outline' => false,
-                'click' => "redirect('/user/{id}')",
+                'icon_type' => 'solid',
+                'click' => "goToEdit('{id}')",
             ],
             [
                 'tip'   => 'Supprimer',
                 'icon'  => 'trash',
                 'color' => 'red',
                 'button_outline'=>false,
-                'click' => "deleteUser({id}, '{first_name}')",
+                'icon_type' => 'solid',
+                'click' => "confirmDelete('{id}')",
             ],
         ];
 
@@ -49,7 +51,7 @@
 @if (session('success-etu-store'))
     <script>
         showNotification(
-            'Création réussie',
+            'Opération réussie',
             "{{ session('success-etu-store') }}"
         );
     </script>
@@ -63,6 +65,25 @@
         );
     </script>
 @endif
+
+<!-- modal de confirmation de suppression -->
+<x-bladewind::modal
+    name="delete-etudiant"
+    type="error"
+    title="Confirmation"
+    ok_button_action="submitDelete()"
+    ok_button_label="Supprimer"
+    cancel_button_label="Annuler"
+    align_buttons="center"
+    >
+    Voulez-vous vraiment supprimer cet étudiant ?
+    <br>
+    Cette action est <b class="text-red-600">irréversible</b>.
+
+</x-bladewind::modal>
+
+
+
 <div class="space-y-8">
 
     {{-- ================= HEADER ================= --}}
@@ -99,10 +120,50 @@
 
 </div>
 
+<form id="send-mail" method="POST" style="display: none;">
+        @csrf
+</form>
+
+<form id="delete-form" method="POST" style="display: none;">
+    @csrf
+    @method('DELETE')
+</form>
+
 <script>
     function goToStoreStu() {
     // On passe l'ID directement via Blade
-    window.location.href = "{{ route('etudiant.create')}}";
+    window.location.href = "{{ route('etudiants.create')}}";
+    }
+
+
+    function goToEdit(etudiantId) {
+        if (!etudiantId) return;
+
+        window.location.href = "{{ route('etudiants.edit', ':id') }}".replace(':id', etudiantId);
+    }
+    
+
+    function confirmDelete(row) {
+        deleteId = row.id ?? row;
+        if (!deleteId){
+            showNotification('Erreur', 'ID introuvable', 'error');
+            return;
+        }
+
+        showModal('delete-etudiant');
+    }
+    function submitDelete() {
+        if (!deleteId) return;
+        const form = document.getElementById('delete-form');
+        form.action = "{{ route('etudiant.destroy', ':id') }}".replace(':id', deleteId);
+        form.submit();
+    }
+    function sendMessage(etudiantId) {
+        if (!etudiantId) return;
+
+        const form = document.getElementById('send-mail');
+        form.action = "{{ route('etudiants.send_credentials', ':id') }}".replace(':id', etudiantId);
+        form.submit();
     }
 </script>
 @endsection
