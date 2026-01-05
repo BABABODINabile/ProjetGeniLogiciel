@@ -6,6 +6,7 @@ use App\Http\Controllers\CompteEtudiantController;
 use App\Http\Controllers\EtudiantController;
 use App\Http\Controllers\FormateurController;
 use App\Http\Controllers\EspaceController;
+use App\Http\Controllers\PromotionController;
 use App\Http\Controllers\CompteFormateurController;
 use App\Http\Controllers\TravailController;
 use App\Http\Controllers\LivraisonController;
@@ -75,14 +76,19 @@ Route::prefix('admin')->middleware(['auth','role:admin'])->group(function(){
     });
 
 
-    Route::prefix('promotions')->group(function () {
-        Route::get('/index',[App\Http\Controllers\PromotionController::class, 'index'])->name('promotions.index');
-        Route::get('/create',[App\Http\Controllers\PromotionController::class, 'create'])->name('promotions.create');
-        Route::post('/store',[App\Http\Controllers\PromotionController::class, 'store'])->name('promotions.store');
-        Route::get('/edit/{promotion}',[App\Http\Controllers\PromotionController::class, 'edit'])->name('promotions.edit');
-        Route::put('/update/{promotion}',[App\Http\Controllers\PromotionController::class, 'update'])->name('promotions.update');
-        Route::delete('/{promotion}',[App\Http\Controllers\PromotionController::class, 'destroy'])->name('promotions.destroy');
+
+
+    Route::prefix('promotions')->name('promotions.')->group(function () {
+        Route::get('/index', [PromotionController::class, 'index'])->name('index');
+        Route::get('/create', [PromotionController::class, 'create'])->name('create');
+        Route::post('/store', [PromotionController::class, 'store'])->name('store');  // Ajout POST
+        Route::get('/show/{promotion}', [PromotionController::class, 'show'])->name('show');
+        Route::get('/edit/{promotion}', [PromotionController::class, 'edit'])->name('edit');
+        Route::put('/update/{promotion}', [PromotionController::class, 'update'])->name('update');  // Ajout PUT
+        Route::delete('/destroy/{promotion}', [PromotionController::class, 'destroy'])->name('destroy');  // Ajout DELETE
     });
+
+
 
 
     Route::prefix('espaces')->group(function () {

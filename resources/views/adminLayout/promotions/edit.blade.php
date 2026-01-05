@@ -1,57 +1,53 @@
-@extends('adminLayout.app')
+@extends('adminLayout.app')  
 
-@section('title', 'Éditer une Promotion')
-@section('page_title', 'Édition Promotion')
+@section('title', 'Modifier une Promotion')
+
+@section('page_title', 'Éditer une Promotion')
 
 @section('content')
-<div class="max-w-4xl mx-auto px-4">
-    <form action="{{ route('promotions.update', $promotion->id) }}" method="POST" class="space-y-4">
+<div class="bg-white rounded-xl shadow-sm p-6 max-w-2xl mx-auto">
+    <h2 class="text-xl font-bold text-slate-800 mb-6">Modifier la Promotion</h2>
+
+    <!-- Affichage des erreurs -->
+    @if ($errors->any())
+        <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+            <ul>
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
+
+    <!-- Formulaire -->
+    <form action="{{ route('promotions.update', $promotion) }}" method="POST">
         @csrf
-        @method('PUT')
+        @method('PUT')  
 
-        <div class="bg-white rounded-3xl shadow-sm border border-slate-200 overflow-hidden">
-            <div class="p-4 border-b border-slate-100 bg-slate-50/50">
-                <h3 class="text-xs font-black text-slate-800 uppercase tracking-widest flex items-center gap-2">
-                    <i class="fas fa-layer-group text-blue-600"></i>
-                    Informations Promotion
-                </h3>
-            </div>
-
-            <div class="p-6 grid grid-cols-1 gap-4">
-                <div>
-                    <label class="block text-[10px] font-bold text-slate-700 uppercase tracking-widest mb-1 px-1">Libellé</label>
-                    <input type="text" name="libelle" value="{{ old('libelle', $promotion->libelle) }}" required
-                        class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-600/20 focus:border-blue-600 outline-none transition-all text-sm">
-                    @error('libelle') <p class="text-red-500 text-[10px] mt-1">{{ $message }}</p> @enderror
-                </div>
-
-                <div>
-                    <label class="block text-[10px] font-bold text-slate-700 uppercase tracking-widest mb-1 px-1">Filière / Option</label>
-                    <select name="filiere_option_id" required class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-600/20 focus:border-blue-600 outline-none transition-all text-sm">
-                        @foreach($filieres as $f)
-                            <option value="{{ $f->id }}" {{ old('filiere_option_id', $promotion->filiere_option_id) == $f->id ? 'selected' : '' }}>{{ $f->option }}</option>
-                        @endforeach
-                    </select>
-                </div>
-
-                <div>
-                    <label class="block text-[10px] font-bold text-slate-700 uppercase tracking-widest mb-1 px-1">Année</label>
-                    <input type="number" name="year" value="{{ old('year', $promotion->year) }}" required min="2000" max="2100"
-                        class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-600/20 focus:border-blue-600 outline-none transition-all text-sm">
-                    @error('year') <p class="text-red-500 text-[10px] mt-1">{{ $message }}</p> @enderror
-                </div>
-
-                <div class="pt-4 flex items-center justify-end gap-4">
-                    <a href="{{ route('promotions.index') }}" class="text-[10px] font-bold text-slate-400 uppercase tracking-widest hover:text-slate-600 transition">
-                        Annuler
-                    </a>
-                    <button type="submit" class="px-6 py-3 bg-gray-900 hover:bg-blue-600 text-white font-black rounded-xl shadow-lg transition-all transform active:scale-95 uppercase tracking-widest text-[10px]">
-                        Enregistrer les modifications
-                    </button>
-                </div>
-            </div>
+        <div class="mb-4">
+            <label for="libelle" class="block text-sm font-medium text-slate-700">Libellé</label>
+            <input type="text" name="libelle" id="libelle" value="{{ old('libelle', $promotion->libelle) }}" class="mt-1 block w-full border border-slate-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" required>
         </div>
 
+        <div class="mb-4">
+            <label for="filiere_option_id" class="block text-sm font-medium text-slate-700">Filière/Option</label>
+            <select name="filiere_option_id" id="filiere_option_id" class="mt-1 block w-full border border-slate-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" required>
+                <option value="">Sélectionnez une filière</option>
+                @foreach($filiereOptions as $option)
+                    <option value="{{ $option->id }}" {{ old('filiere_option_id', $promotion->filiere_option_id) == $option->id ? 'selected' : '' }}>{{ $option->option }}</option>
+                @endforeach
+            </select>
+        </div>
+
+        <div class="mb-4">
+            <label for="year" class="block text-sm font-medium text-slate-700">Année</label>
+            <input type="number" name="year" id="year" value="{{ old('year', $promotion->year) }}" min="1900" max="{{ date('Y') + 10 }}" class="mt-1 block w-full border border-slate-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" required>
+        </div>
+
+        <div class="flex justify-end gap-4">
+            <a href="{{ route('promotions.index') }}" class="bg-gray-500 text-white px-4 py-2 rounded-lg hover:bg-gray-600 transition">Annuler</a>
+            <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition">Mettre à jour</button>
+        </div>
     </form>
 </div>
 @endsection
