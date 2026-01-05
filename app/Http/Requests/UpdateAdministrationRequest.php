@@ -11,7 +11,7 @@ class UpdateAdministrationRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -21,8 +21,16 @@ class UpdateAdministrationRequest extends FormRequest
      */
     public function rules(): array
     {
+        $administration = $this->route('administration');
+        $userId = $administration->user->id ?? null;
+
         return [
-            //
+            'email' => ['required','email', \Illuminate\Validation\Rule::unique('users','email')->ignore($userId)],
+            'nom' => 'required|string|max:255',
+            'prenom' => 'required|string|max:255',
+            'fonction' => 'required|string|max:255',
+            'is_active' => 'nullable|boolean',
+            'password' => 'nullable|string|min:8',
         ];
     }
 }

@@ -72,7 +72,13 @@ Route::prefix('admin')->middleware(['auth','role:admin'])->group(function(){
 
 
     Route::prefix('administration')->group(function () {
-        Route::get('/index', fn() => view('adminLayout.administrations.index'))->name('administrations.index');
+        Route::get('/index', [App\Http\Controllers\AdministrationController::class, 'index'])->name('administrations.index');
+        Route::get('/create', [App\Http\Controllers\AdministrationController::class, 'create'])->name('administrations.create');
+        Route::post('/store', [App\Http\Controllers\AdministrationController::class, 'store'])->name('administrations.store');
+        Route::get('/edit/{administration}', [App\Http\Controllers\AdministrationController::class, 'edit'])->name('administrations.edit');
+        Route::put('/update/{administration}', [App\Http\Controllers\AdministrationController::class, 'update'])->name('administrations.update');
+        Route::delete('/{administration}', [App\Http\Controllers\AdministrationController::class, 'destroy'])->name('administrations.destroy');
+        Route::post('/send-credentials/{administration}', [App\Http\Controllers\AdministrationController::class, 'sendCredentials'])->name('administrations.send_credentials');
     });
 
 
