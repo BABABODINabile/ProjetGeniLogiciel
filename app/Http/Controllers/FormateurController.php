@@ -72,7 +72,7 @@ class FormateurController extends Controller
      */
     public function edit(Formateur $formateur)
     {
-        //
+        return view('adminLayout.formateurs.edit', compact('formateur'));
     }
 
     /**
@@ -80,7 +80,13 @@ class FormateurController extends Controller
      */
     public function update(UpdateFormateurRequest $request, Formateur $formateur)
     {
-        //
+        try {
+            $updated = $this->formateurService->updateFormateur($formateur->id, $request->validated());
+            return redirect()->route('formateurs.index')
+                ->with('success-form-store', "Le formateur {$updated->prenom} a été mis à jour avec succès.");
+        } catch (\Exception $e) {
+            return back()->withInput()->with('error-form-store', 'Erreur lors de la mise à jour : ' . $e->getMessage());
+        }
     }
 
     /**
@@ -88,6 +94,24 @@ class FormateurController extends Controller
      */
     public function destroy(Formateur $formateur)
     {
-        //
+        try {
+            $this->formateurService->deleteFormateur($formateur->id);
+            return redirect()->route('formateurs.index')->with('success-form-store', "Le formateur {$formateur->prenom} a été supprimé.");
+        } catch (\Exception $e) {
+            return back()->with('error-form-store', 'Erreur lors de la suppression : ' . $e->getMessage());
+        }
+    }
+
+    /**
+     * Envoi manuel des accès au formateur
+     */
+    public function sendCredentials(Formateur $formateur)
+    {
+        try {
+            $this->formateurService->sendCredentials($formateur->id);
+            return redirect()->route('formateurs.index')->with('success-form-store', "Les accès ont été envoyés à {$formateur->prenom}.");
+        } catch (\Exception $e) {
+            return back()->with('error-form-store', 'Erreur lors de l\'envoi des accès : ' . $e->getMessage());
+        }
     }
 }

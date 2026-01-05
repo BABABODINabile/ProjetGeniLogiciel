@@ -10,6 +10,11 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class Promotion extends Model
 {
     use HasFactory;
+  
+    public function etudiants() : HasMany
+    {
+        return $this->hasMany(Etudiant::class);
+    }
 
     protected $fillable = ['libelle', 'filiere_option_id', 'year'];  // Utilisez les vrais champs
 

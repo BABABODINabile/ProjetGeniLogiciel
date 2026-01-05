@@ -105,4 +105,26 @@ class EtudiantService
             return true;
         });
     }
+
+    /**
+     * Envoyer manuellement les accès (mot de passe temporaire) à l'étudiant
+     */
+    public function sendCredentials($id)
+    {
+        return DB::transaction(function () use ($id) {
+            $etudiant = Etudiant::findOrFail($id);
+            $user = $etudiant->user;
+
+            // Générer un mot de passe temporaire
+            $temporaryPassword = Str::random(10);
+
+            // Mettre à jour le mot de passe de l'utilisateur
+            $user->update(['password' => Hash::make($temporaryPassword)]);
+
+            // Envoyer la notification avec le mot de passe temporaire
+            $user->notify(new WelcomeUserNotification($temporaryPassword));
+
+            return true;
+        });
+    }
 }

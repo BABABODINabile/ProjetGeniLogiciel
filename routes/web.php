@@ -49,22 +49,31 @@ Route::prefix('admin')->middleware(['auth','role:admin'])->group(function(){
 
     Route::prefix('etudiants')->group(function () {
         Route::get('/index',[EtudiantController::class, 'index'])->name('etudiants.index');
-        Route::get('/createStudent',[EtudiantController::class,'create'])->name('etudiant.create');
+        Route::get('/createStudent',[EtudiantController::class,'create'])->name('etudiants.create');
         Route::post('/storeStudent',[EtudiantController::class,'store'])->name('etudiant.store');
+        // Edition / mise à jour / suppression et envoi manuel d'accès
+        Route::get('/edit/{etudiant}', [EtudiantController::class, 'edit'])->name('etudiants.edit');
+        Route::put('/update/{etudiant}', [EtudiantController::class, 'update'])->name('etudiant.update');
+        Route::delete('/{etudiant}', [EtudiantController::class, 'destroy'])->name('etudiant.destroy');
+        Route::post('/send-credentials/{etudiant}', [EtudiantController::class, 'sendCredentials'])->name('etudiants.send_credentials');
     });
 
 
     Route::prefix('formateurs')->group(function () {
         Route::get('/index',[FormateurController::class, 'index'])->name('formateurs.index');
-        Route::get('/createFormateur',[FormateurController::class,'create'])->name('formateur.create');
-        Route::post('/storeFormateur',[FormateurController::class,'store'])->name('formateur.store');
+        Route::get('/createFormateur',[FormateurController::class,'create'])->name('formateurs.create');
+        Route::post('/storeFormateur',[FormateurController::class,'store'])->name('formateurs.store');
+        // Edition / mise à jour / suppression et envoi manuel d'accès pour les formateurs
+        Route::get('/edit/{formateur}', [FormateurController::class, 'edit'])->name('formateurs.edit');
+        Route::put('/update/{formateur}', [FormateurController::class, 'update'])->name('formateurs.update');
+        Route::delete('/{formateur}', [FormateurController::class, 'destroy'])->name('formateurs.destroy');
+        Route::post('/send-credentials/{formateur}', [FormateurController::class, 'sendCredentials'])->name('formateurs.send_credentials');
     });
 
 
     Route::prefix('administration')->group(function () {
         Route::get('/index', fn() => view('adminLayout.administrations.index'))->name('administrations.index');
     });
-
 
 
 
@@ -84,6 +93,8 @@ Route::prefix('admin')->middleware(['auth','role:admin'])->group(function(){
 
     Route::prefix('espaces')->group(function () {
         Route::get('/index', [EspaceController::class, 'index'])->name('espaces.index');
+        Route::get('/create', [EspaceController::class, 'create'])->name('espaces.create');
+        Route::post('/store', [EspaceController::class, 'store'])->name('espaces.store');
         Route::get('/edit/{espace}', [EspaceController::class, 'edit'])->name('espaces.edit');
         Route::get('/show/{espace}', [EspaceController::class, 'show'])->name('espaces.show');
         Route::get('/addStu/{espace}', [EspaceController::class, 'addStu'])->name('espaces.addStu');

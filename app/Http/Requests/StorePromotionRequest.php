@@ -11,7 +11,7 @@ class StorePromotionRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +22,9 @@ class StorePromotionRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'libelle' => 'required|string|max:255',
+            'filiere_option_id' => 'required|exists:filiere_options,id',
+            'year' => 'required|digits:4|integer|min:2000|max:2100',
         ];
     }
 }

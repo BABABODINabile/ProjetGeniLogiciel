@@ -9,7 +9,7 @@
 
 @if (session('success-form-store'))
     <script>
-        showNotification('Création réussie', "{{ session('success-form-store') }}");
+        showNotification('Opération réussie', "{{ session('success-form-store') }}");
     </script>
 @endif
 
@@ -19,19 +19,25 @@
             'icon'  => 'envelope',
             'tip'   => 'Envoyer mail',
             'color' => 'green',
-            'click' => "", // à implémenter si besoin
+            'icon_type' => 'solid',
+            'button_outline' => false,
+            'click' => "sendMessage('{id}')",
         ],
         [
             'tip'   => 'Editer',
             'icon'  => 'pencil-square',
             'color'=>'gray',
-            'click' => "redirect('/admin/formateurs/edit/{id}')",
+            'icon_type' => 'solid',
+            'button_outline' => false,
+            'click' => "goToEdit('{id}')",
         ],
         [
             'tip'   => 'Supprimer',
             'icon'  => 'trash',
             'color' => 'red',
-            'click' => "deleteUser({id}, '{nom}')",
+            'icon_type' => 'solid',
+            'button_outline'=>false,
+            'click' => "confirmDelete('{id}')",
         ],
     ];
 
@@ -43,6 +49,26 @@
         'specialite' => 'Spécialité',
     ];
 @endphp
+
+
+
+<!-- modal de confirmation de suppression -->
+<x-bladewind::modal
+    name="delete-formateur"
+    type="error"
+    title="Confirmation"
+    ok_button_action="submitDelete()"
+    ok_button_label="Supprimer"
+    cancel_button_label="Annuler"
+    align_buttons="center"
+    >
+    Voulez-vous vraiment supprimer ce formateur ?
+    <br>
+    Cette action est <b class="text-red-600">irréversible</b>.
+
+</x-bladewind::modal>
+
+
 
 <div class="space-y-8">
     <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
@@ -76,9 +102,51 @@
 
 </div>
 
+    <form id="send-mail" method="POST" style="display: none;">
+            @csrf
+    </form>
+
+    <form id="delete-form" method="POST" style="display: none;">
+        @csrf
+        @method('DELETE')
+    </form>
+
 <script>
     function goToCreateForm() {
-        window.location.href = "{{ route('formateur.create') }}";
+        window.location.href = "{{ route('formateurs.create') }}";
+    }
+
+    function goToEdit(formateurId) {
+        if (!formateurId) return;
+
+        window.location.href = "{{ route('formateurs.edit', ':id') }}".replace(':id', formateurId);
+    }
+
+
+    function confirmDelete(row) {
+        deleteId = row.id ?? row;
+        if (!deleteId){
+            showNotification('Erreur', 'ID introuvable', 'error');
+            return;
+        }
+        showModal('delete-formateur');
+    }
+
+
+    function submitDelete() {
+        if (!deleteId) return;
+        const form = document.getElementById('delete-form');
+        form.action = "{{ route('formateurs.destroy', ':id') }}".replace(':id', deleteId);
+        form.submit();
+    }
+
+
+    function sendMessage(formateurId) {
+        if (!formateurId) return;
+
+        const form = document.getElementById('send-mail');
+        form.action = "{{ route('formateurs.send_credentials', ':id') }}".replace(':id', formateurId);
+        form.submit();
     }
 </script>
 

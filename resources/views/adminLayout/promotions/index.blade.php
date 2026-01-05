@@ -30,7 +30,7 @@
                 @forelse($promotions as $promotion)
                     <tr class="hover:bg-slate-50">
                         <td class="border border-slate-200 px-4 py-2 text-sm text-slate-700">{{ $promotion->libelle }}</td>
-                        <td class="border border-slate-200 px-4 py-2 text-sm text-slate-700">{{ $promotion->filiereOption?->nom ?? 'N/A' }}</td>
+                        <td class="border border-slate-200 px-4 py-2 text-sm text-slate-700">{{ $promotion->filiere_option?->option ?? 'N/A' }}</td>
                         <td class="border border-slate-200 px-4 py-2 text-sm text-slate-700">{{ $promotion->year }}</td>
                         <td class="border border-slate-200 px-4 py-2 text-center">
                             <div class="flex justify-center gap-2">

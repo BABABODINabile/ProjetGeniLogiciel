@@ -4,12 +4,14 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Promotion;
+use App\Services\PromotionService;
+use App\Models\FiliereOption;
 
 class PromotionController extends Controller
 {
     public function index()
     {
-        $promotions = Promotion::with('filiereOption')->get();  // Charge la relation pour afficher le nom de la filière
+        $promotions = Promotion::with('filiere_option')->get();  // Charge la relation pour afficher le nom de la filière
         return view('adminLayout.promotions.index', compact('promotions'));
     }
 

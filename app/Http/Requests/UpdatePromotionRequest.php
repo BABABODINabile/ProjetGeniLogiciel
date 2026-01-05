@@ -11,7 +11,7 @@ class UpdatePromotionRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -21,8 +21,13 @@ class UpdatePromotionRequest extends FormRequest
      */
     public function rules(): array
     {
+        $promotion = $this->route('promotion');
+        $id = $promotion->id ?? null;
+
         return [
-            //
+            'libelle' => 'required|string|max:255',
+            'filiere_option_id' => 'required|exists:filiere_options,id',
+            'year' => 'required|digits:4|integer|min:2000|max:2100',
         ];
     }
 }
