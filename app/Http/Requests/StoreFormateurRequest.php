@@ -22,8 +22,8 @@ class StoreFormateurRequest extends FormRequest
     {
         return [
             'email'      => 'required|email|unique:users,email',
-            'nom'        => 'required|string|max:255',
-            'prenom'     => 'required|string|max:255',
+            'nom'        => ['required', 'string', 'max:255', 'not_regex:/^[0-9]+$/'],
+            'prenom'     => ['required', 'string', 'max:255', 'not_regex:/^[0-9]+$/'],
             'specialite' => 'nullable|string|max:255',
             'is_active'  => 'nullable|boolean',
         ];
@@ -40,6 +40,8 @@ class StoreFormateurRequest extends FormRequest
             'email.unique'     => "Cette adresse email est déjà utilisée par un autre utilisateur (étudiant ou formateur).",
             'nom.required'     => "Le nom de famille est obligatoire.",
             'prenom.required'  => "Le prénom est obligatoire.",
+            'nom.not_regex' => 'Le nom ne peut pas être composé uniquement de chiffres.',
+            'prenom.not_regex' => 'Le prénom ne peut pas être composé uniquement de chiffres.',
             'max'              => "Le champ :attribute est trop long (maximum :max caractères).",
             'boolean'          => "La valeur du champ :attribute est incorrecte.",
         ];

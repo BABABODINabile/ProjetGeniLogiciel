@@ -55,8 +55,13 @@ class EspaceController extends Controller
                 'first_name' => $espace->nom ?? '',
                 'description' => $espace->description ?? '',
                 'matière'=>$espace->matiere->libelle,
-               'formateur' => $espace->formateur ? $espace->formateur->nom . " " . $espace->formateur->prenom : $en_attente,
-                'promotion' => $espace->promotion?->libelle ?? $en_attente,
+               'formateur' => $espace->formateur 
+    ? $espace->formateur->nom . " " . $espace->formateur->prenom 
+    : ($en_attente . " <a href='/admin/espaces/addf/{$espace->id}' class='ml-2 inline-flex items-center px-2.5 py-0.5 rounded text-xs font-medium bg-indigo-600 text-white'>Ajout formateur</a>"),
+
+'promotion' => $espace->promotion?->libelle 
+    ?? ($en_attente . " <a href='/admin/espaces/addp/{$espace->id}' class='ml-2 inline-flex items-center px-2.5 py-0.5 rounded text-xs font-medium bg-indigo-600 text-white'>Ajout promotion</a>"),
+                'NB d\'etudiants'=>$espace->etudiants->count(),
             ];
         })->toArray();
         return view('adminLayout.espaces.index', compact('data'));
@@ -190,6 +195,70 @@ class EspaceController extends Controller
 
 
         return view('adminLayout.espaces.edit', compact('espace', 'matieres', 'promotions', 'formateurs'));
+    }
+
+    public function addformateur(UpdateEspaceRequest $request, Espace $espace)
+    {
+        $matiered = Matiere::all();
+        $promotiond = Promotion::all();
+        $formateurd = Formateur::all();
+
+        $matieres = $matiered->map(function($matiered) {
+            return [
+                'id' => $matiered->id,
+                'libelle' => $matiered->libelle?? '',
+            ];
+        })->toArray();
+
+        $promotions = $promotiond->map(function($promotiond) {
+            return [
+                'id' => $promotiond->id,
+                'libelle' => $promotiond->libelle?? '',
+            ];
+        })->toArray();
+
+        $formateurs = $formateurd->map(function($formateurd) {
+            return [
+                'id' => $formateurd->id,
+                'NomPrenom' => $formateurd->nom." ".$formateurd->prenom?? '',
+            ];
+        })->toArray();
+        
+
+
+        return view('adminLayout.espaces.addFormateur', compact('espace', 'matieres', 'promotions', 'formateurs'));
+    }
+
+    public function addpromotion(UpdateEspaceRequest $request, Espace $espace)
+    {
+        $matiered = Matiere::all();
+        $promotiond = Promotion::all();
+        $formateurd = Formateur::all();
+
+        $matieres = $matiered->map(function($matiered) {
+            return [
+                'id' => $matiered->id,
+                'libelle' => $matiered->libelle?? '',
+            ];
+        })->toArray();
+
+        $promotions = $promotiond->map(function($promotiond) {
+            return [
+                'id' => $promotiond->id,
+                'libelle' => $promotiond->libelle?? '',
+            ];
+        })->toArray();
+
+        $formateurs = $formateurd->map(function($formateurd) {
+            return [
+                'id' => $formateurd->id,
+                'NomPrenom' => $formateurd->nom." ".$formateurd->prenom?? '',
+            ];
+        })->toArray();
+        
+
+
+        return view('adminLayout.espaces.addPromotion', compact('espace', 'matieres', 'promotions', 'formateurs'));
     }
 
     //Édition d'un espace

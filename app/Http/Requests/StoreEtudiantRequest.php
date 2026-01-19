@@ -15,8 +15,8 @@ class StoreEtudiantRequest extends FormRequest
     {
         return [
             'email'             => 'required|email|unique:users,email',
-            'nom'               => 'required|string|max:255',
-            'prenom'            => 'required|string|max:255',
+            'nom'        => ['required', 'string', 'max:255', 'not_regex:/^[0-9]+$/'],
+            'prenom'     => ['required', 'string', 'max:255', 'not_regex:/^[0-9]+$/'],
             'matricule'         => 'required|string|unique:etudiants,matricule',
             'promotion_id'      => 'required|exists:promotions,id',
             'filiere_option_id' => 'required|exists:filiere_options,id',
@@ -31,6 +31,8 @@ class StoreEtudiantRequest extends FormRequest
     public function messages(): array
     {
         return [
+            'nom.not_regex' => 'Le nom ne peut pas être composé uniquement de chiffres.',
+            'prenom.not_regex' => 'Le prénom ne peut pas être composé uniquement de chiffres.',
             'email.required'    => "L'adresse email est indispensable pour l'envoi des accès.",
             'email.email'       => "Le format de l'adresse email n'est pas valide.",
             'email.unique'      => "Cette adresse email est déjà associée à un compte utilisateur.",
