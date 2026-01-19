@@ -3,7 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
-
+use Illuminate\Validation\Rule;
 class UpdatePromotionRequest extends FormRequest
 {
     /**
@@ -28,6 +28,10 @@ class UpdatePromotionRequest extends FormRequest
             'libelle' => 'required|string|max:255',
             'filiere_option_id' => 'required|exists:filiere_options,id',
             'year' => 'required|digits:4|integer|min:2000|max:2100',
+             Rule::unique('promotions')->where(function ($query) {
+                return $query->where('year', $this->year)
+                             ->where('filiere_option_id', $this->filiere_option_id);
+            })->ignore($this->route('promotion')) // Important pour la modification (update)
         ];
     }
 }

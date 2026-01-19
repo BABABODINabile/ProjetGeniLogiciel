@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Promotion;
 use App\Services\PromotionService;
 use App\Models\FiliereOption;
+use Illuminate\Validation\Rule;
 
 class PromotionController extends Controller
 {
@@ -24,9 +25,19 @@ class PromotionController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'libelle' => 'required|string|max:255',
+            'libelle' => [
+            'required', 
+            'string', 
+            'max:255',
+            // On définit l'unicité du libellé pour une filière et une année précise
+            Rule::unique('promotions')->where(fn ($query) => 
+                $query->where('filiere_option_id', $request->filiere_option_id)
+                      ->where('year', $request->year)
+            )
+        ],
             'filiere_option_id' => 'required|exists:filiere_options,id',
             'year' => 'required|integer|min:1900|max:' . (date('Y') + 10),
+        
         ]);
         Promotion::create($validated);
         return redirect()->route('promotions.index');

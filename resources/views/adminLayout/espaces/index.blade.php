@@ -60,6 +60,14 @@
         );
     </script>
 @endif
+@if (session('success'))
+    <script>
+        showNotification(
+            'Création réussie',
+            "{{ session('success') }}"
+        );
+    </script>
+@endif
 
 <!-- modal de confirmation de suppression -->
 <x-bladewind::modal

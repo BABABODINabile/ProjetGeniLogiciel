@@ -102,6 +102,8 @@ Route::prefix('admin')->middleware(['auth','role:admin'])->group(function(){
         Route::get('/create', [EspaceController::class, 'create'])->name('espaces.create');
         Route::post('/store', [EspaceController::class, 'store'])->name('espaces.store');
         Route::get('/edit/{espace}', [EspaceController::class, 'edit'])->name('espaces.edit');
+        Route::get('/addf/{espace}', [EspaceController::class, 'addformateur'])->name('espaces.addf');
+        Route::get('/addp/{espace}', [EspaceController::class, 'addpromotion'])->name('espaces.addp');
         Route::get('/show/{espace}', [EspaceController::class, 'show'])->name('espaces.show');
         Route::get('/addStu/{espace}', [EspaceController::class, 'addStu'])->name('espaces.addStu');
         Route::delete('/{espace}', [EspaceController::class, 'destroy'])->name('espaces.destroy');
